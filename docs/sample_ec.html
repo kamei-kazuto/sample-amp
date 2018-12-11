@@ -151,7 +151,7 @@
         }
       </script>
     </amp-state>
-    <amp-state id="product">
+    <amp-state id="item">
       <script type="application/json">
       {
         "1001": {
@@ -182,9 +182,9 @@
       </script>
     </amp-state>
     <amp-carousel type="slides" layout="fixed-height" height=250 id="carousel">
-      <amp-img width=200 height=250 src="./assets/sample_ec/1001.png" [src]="product[selected.sku].image"></amp-img>
-      <amp-img width=300 height=375 src="./assets/sample_ec/1001.png" [src]="product[selected.sku].image"></amp-img>
-      <amp-img width=400 height=500 src="./assets/sample_ec/1001.png" [src]="product[selected.sku].image"></amp-img>
+      <amp-img width=200 height=250 src="./assets/sample_ec/1001.png" [src]="item[selected.sku].image"></amp-img>
+      <amp-img width=300 height=375 src="./assets/sample_ec/1001.png" [src]="item[selected.sku].image"></amp-img>
+      <amp-img width=400 height=500 src="./assets/sample_ec/1001.png" [src]="item[selected.sku].image"></amp-img>
     </amp-carousel>
     <p class="dots">
       <span [class]="selected.slide == 0 ? 'current' : ''" class="current"></span>
@@ -212,8 +212,9 @@
       </div>
 
       <div class="options price">
+        <amp-bind-macro id="totalPrice" arguments="price" expression="price * quantity" />
         <h6>PRICE :
-          <span [text]="product[selected.sku].sizes[selectedSize] || '---'">---</span>
+          <span [text]="totalPrice(item[selected.sku].sizes[selectedSize]) || '---'">---</span>
         </h6>
       </div>
 
@@ -227,19 +228,19 @@
           on="select:AMP.setState({ selectedSize: event.targetOption})">
           <table>
             <tr>
-              <td [class]="product[selected.sku].sizes['XS'] ? '' : 'unavailable'">
+              <td [class]="item[selected.sku].sizes['XS'] ? '' : 'unavailable'">
                 <div option="XS">XS</div>
               </td>
-              <td [class]="product[selected.sku].sizes['S'] ? '' : 'unavailable'">
+              <td [class]="item[selected.sku].sizes['S'] ? '' : 'unavailable'">
                 <div option="S">S</div>
               </td>
-              <td [class]="product[selected.sku].sizes['M'] ? '' : 'unavailable'">
+              <td [class]="item[selected.sku].sizes['M'] ? '' : 'unavailable'">
                 <div option="M">M</div>
               </td>
-              <td [class]="product[selected.sku].sizes['L'] ? '' : 'unavailable'">
+              <td [class]="item[selected.sku].sizes['L'] ? '' : 'unavailable'">
                 <div option="L">L</div>
               </td>
-              <td [class]="product[selected.sku].sizes['XL'] ? '' : 'unavailable'">
+              <td [class]="item[selected.sku].sizes['XL'] ? '' : 'unavailable'">
                 <div option="XL">XL</div>
               </td>
             </tr>
@@ -249,8 +250,8 @@
 
       <div class="options quantity">
         <h6>QUANTITY : <span [text]="quantity || '---'">---</span></h6>
-        <select name="quantity" on="select:AMP.setState({ quantity: event.target.value})">
-          <option value="1">1</option>
+        <select name="quantity" on="change:AMP.setState({ quantity: event.value })">
+          <option value="1" selected>1</option>
           <option value="2">2</option>
           <option value="3">3</option>
         </select>
@@ -260,9 +261,13 @@
         <!-- TODO: "Conditionally enabled button" -->
         <input type="submit" value="ADD TO CART"
           class="mdl-button mdl-button--raised mdl-button--accent"
-          [disabled]="!selectedSize || !product[selected.sku].sizes[selectedSize]">
+          [disabled]="!selectedSize || !item[selected.sku].sizes[selectedSize]">
       </div>
-
+      <div submitting>
+        <template type="amp-mustache">
+          Form submitting... Thank you for waiting .
+        </template>
+      </div>
       <div submit-success>
         <template type="amp-mustache">Added {{quantity}} shirt(s) to cart!</template>
       </div>
