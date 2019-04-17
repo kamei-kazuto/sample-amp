@@ -1,0 +1,14 @@
+{
+    "name": "sample-ampamp",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "kmkzt",
+    "private": true,
+    "scripts": {
+      "start": "node ./server/index.js"
+    },
+    "dependencies": {
+      "express": "4.16.4"
+    }
+  }
+  
